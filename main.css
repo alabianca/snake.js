@@ -1,0 +1,31 @@
+body {
+    background: black;
+}
+
+#container {
+    width: 500px;
+    height: 500px;
+    margin: 0 auto;
+    background: white;
+    position: relative;
+}
+
+#snake, .snake {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: blue;
+    position: absolute;
+}
+
+.snake {
+    background: green;
+}
+
+#target {
+    display: none;
+    width: 10px;
+    height: 10px;
+    background: red;
+    position: absolute;
+}
