@@ -25,8 +25,6 @@ function start() {
     setTarget();
 
     s.on('gain', (historicalData)=>{
-        console.log('HIT');
-        console.log(historicalData)
         removeTarget();
         const node = createNode();
         s.push(node);
@@ -72,7 +70,6 @@ function randomPosition() {
 function registerEventListeners(snake) {
     document.addEventListener('keypress', (e)=>{
         const keyCode = e.keyCode;
-        console.log(keyCode);
         switch(keyCode) {
             case UP: snake.setDirection("UP");
                 break;
@@ -122,7 +119,7 @@ Snake.prototype.pause = function() {
 }
 
 Snake.prototype.continue = function() {
-    this._intervalId = setInterval(()=> this._move(),20)
+    this._intervalId = setInterval(()=> this._move(),100)
 }
 
 Snake.prototype._init = function() {
@@ -130,7 +127,7 @@ Snake.prototype._init = function() {
     this.head.setTop(50);
     this.head.setLeft(50);
     this.setDirection(this.generateRandomDir());
-    this._intervalId = setInterval(()=> this._move() ,20);
+    this._intervalId = setInterval(()=> this._move() ,100);
 }
 
 Snake.prototype.on = function(event, handler) {
@@ -236,6 +233,9 @@ Snake.prototype._move = function() {
         const move = node.move();
         this.setDirection(this._currentDirection);
         dataAboutThisMove.push(move);
+        if(this._hitBody(this.head,node)) {
+            this._emit(Snake.EVENT_LOSS);
+        }
     });
 
     if(this._hitTarget(this.head)) {
@@ -254,6 +254,21 @@ Snake.prototype._hitTarget = function(node) {
         return true;
     }
 
+    return false;
+}
+
+Snake.prototype._hitBody = function(head,bodyNode) {
+    const headPos = head.getCurrentPosition();
+    const bodyPos = bodyNode.getCurrentPosition();
+
+    if(head === bodyNode) {
+        return false;
+    }
+
+    if(headPos.top === bodyPos.top && headPos.left === bodyPos.left) {
+        return true;
+    }
+    
     return false;
 }
 
